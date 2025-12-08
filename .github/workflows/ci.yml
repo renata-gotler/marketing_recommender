@@ -33,7 +33,7 @@ jobs:
         uses: astral-sh/ruff-action@v3
         with:
           args: 'format'
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: 'style fixes by ruff'
 
@@ -86,7 +86,7 @@ jobs:
           badge=$(head -n 1 code-coverage-results.md)
           echo $badge
           sed -i "2s|.*|${badge}|" README.md
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: 'update coverage badge on README.md'
           file_pattern: "README.md"
