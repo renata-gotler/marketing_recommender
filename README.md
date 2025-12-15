@@ -54,7 +54,7 @@ A solução envolve:
 
 ▶️ Como Executar
 - Clone o repositório:
-git clone https://github.com/seu-usuario/ifood-case.git
+git clone https://github.com/renata-gotler/marketing_recommender
 cd ifood-case
 
 
@@ -78,3 +78,4 @@ pip install -r requirements.txt
 - Justificativa das escolhas técnicas.
 - Criatividade na solução.
 - Comunicação clara dos resultados.
+- [Apresentação](https://docs.google.com/presentation/d/1-rRTXZKefMvB9VkbZJ1pcsFOk0fYty6OLC5sDlrL2Zg/edit?usp=sharing)

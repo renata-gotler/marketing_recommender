@@ -40,13 +40,13 @@ class MLFlowTracker:
         print(f"Carregando modelo do run {run_id}")
         
         model_uri = f"runs:/{run_id}/{artifact_path}"
-        model = mlflow.spark.load_model(model_uri)
+        model = mlflow.sklearn.load_model(model_uri)
         
         print(f"Modelo carregado com sucesso!")
         return model
 
 
-    def get_best_model(self, metric: str = "f1", ascending=True):
+    def get_best_model(self, metric: str = "f1_score_macro", ascending=True):
         """
         Encontra o melhor modelo baseado em uma métrica
         """
