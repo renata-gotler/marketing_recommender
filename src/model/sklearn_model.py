@@ -19,22 +19,21 @@ class Classifier():
         self.model = pipeline.fit(train_X, train_y)
         return self.model
     
-    def evaluate(self, test_X, test_y) -> Dict[str, float]:
-        print("Fazendo predições...")
-        predictions = self.model.predict(test_X)
-        
+    def evaluate(self, predictions, test_y) -> Dict[str, float]:
+        print("Fazendo predições...")        
         print("Avaliando...")
         results = {}
         results["accuracy"] = accuracy_score(test_y, predictions)
         results["f1"] = f1_score(test_y, predictions, average="weighted")
         results["precision"] = precision_score(test_y, predictions, average="weighted")
-        results["recall"] = recall_score(test_y, predictions, average="weighted")
+        results["recall"] = recall_score(test_y, predictions, average="weighted")                
+        return results
 
-        cm = confusion_matrix(test_y, predictions)
+    def get_confusion_matrix(self, predictions, test_y, **params):
+        cm = confusion_matrix(test_y, predictions, **params)
         cm_df = pd.DataFrame(cm)
         cm_df.to_csv("/tmp/confusion_matrix_classification.csv", index=False)
-                
-        return results
+        return cm
 
     def cross_validation_tuning(self, train_X, train_y, base_pipeline, paramGrid, evaluator="f1", numFolds: int = 3, seed: int = 42):
         """
