@@ -6,7 +6,7 @@ import pandas as pd
 
 class Classifier():
 
-    metrics = ["accuracy", "f1", "precision", "recall"]
+    metrics = [f1_score, precision_score, recall_score]
     model = None
 
     def build_pipeline(self, stages: Tuple[str, object], model: object, **params) -> Pipeline:
@@ -24,9 +24,9 @@ class Classifier():
         print("Avaliando...")
         results = {}
         results["accuracy"] = accuracy_score(test_y, predictions)
-        results["f1"] = f1_score(test_y, predictions, average="weighted")
-        results["precision"] = precision_score(test_y, predictions, average="weighted")
-        results["recall"] = recall_score(test_y, predictions, average="weighted")                
+        for metric in self.metrics:
+            for average in ["macro", 'weighted', "micro"]:
+                results[f"{metric.__name__}_{average}"] = metric(test_y, predictions, average=average)             
         return results
 
     def get_confusion_matrix(self, predictions, test_y, **params):
