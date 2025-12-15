@@ -1,8 +1,8 @@
 
 from typing import List, Any, Tuple, Optional, Dict
 
-from pyspark.ml.feature import StringIndexer, OneHotEncoder, StandardScaler
-from pyspark.ml import Transformer, Imputer
+from pyspark.ml.feature import StringIndexer, OneHotEncoder, StandardScaler, Imputer, VectorAssembler
+from pyspark.ml import Transformer
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, when
 
@@ -10,7 +10,7 @@ class StrImputer(Transformer):
     """
     Custom Transformer to impute missing values in the 'gender' column with a default value.
     """
-    def __init__(self, inputCol: str, value: str) -> None:
+    def __init__(self, inputCol: str, outputCols: str, value: str) -> None:
         """
         Initialize StrImputer.
 
@@ -19,6 +19,7 @@ class StrImputer(Transformer):
         """
         super().__init__()
         self.inputCol = inputCol
+        self.outputCols = outputCols
         self.default_value = value
 
     def _transform(self, df: DataFrame) -> DataFrame:
@@ -32,7 +33,7 @@ class StrImputer(Transformer):
             DataFrame: Transformed DataFrame with imputed gender values.
         """
         return df.withColumn(
-            self.inputCol,
+            self.outputCols,
             when(col(self.inputCol).isNull(), self.default_value)
              .otherwise(col(self.inputCol))
         )
@@ -60,7 +61,7 @@ class PreProcessing():
         """
         if imputer_mapping:
             for col_name, value in imputer_mapping.items():
-                imputer: GenderImputer = StrImputer(inputCol=col_name, value=value)
+                imputer: GenderImputer = StrImputer(inputCol=col_name, outputCols=col_name, value=value)
                 self.stages.append(imputer)
 
         for cat_col in categorical_features:
@@ -86,12 +87,13 @@ class PreProcessing():
         Args:
             numerical_features (List[str]): List of numerical feature names.
         """
-        for num_col in numerical_features:
-            imputer: Any = Imputer(
-                inputCols=[num_col],
-                strategy="median"
-            )
-            self.stages.append(imputer)
+        imputer = Imputer(
+            inputCols=numerical_features,
+            outputCols=[f"{c}_imputed" for c in numerical_features],
+            strategy="median"
+        )
+        self.stages.append(imputer)
+
         for num_col in numerical_features:
             scaler: StandardScaler = StandardScaler(inputCol=num_col, outputCol=f"{num_col}_scaled")
             self.numerical_cols.append(f"{num_col}_scaled")
