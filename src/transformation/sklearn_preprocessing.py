@@ -34,7 +34,6 @@ class PreProcessing:
 
 
     def build_numerical_transformation_pipeline(self, numerical_features: List[str]) -> None:
-        transformers = []
         if numerical_features:
             num_pipeline = Pipeline([
                 ("imputer", SimpleImputer(strategy="median")),

@@ -50,6 +50,9 @@ A solução envolve:
 - Teste de abordagem hierárquica (“oferta vs. sem oferta” → “qual oferta”).
 - Personalizar recomendações por canal (não havia essa informação na tabela de transações).
 - Extrair mais variáveis conseguindo colocar no dataset de transações informações adicionais como a data da transação para entender comportamento do cliente ao longo do tempo.
+- Limpar o código
+- Adicionar testes unitários
+- Produtização
 - Monitorar métricas de negócio em piloto real.
 
 ▶️ Como Executar

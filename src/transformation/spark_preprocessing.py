@@ -61,7 +61,7 @@ class PreProcessing():
         """
         if imputer_mapping:
             for col_name, value in imputer_mapping.items():
-                imputer: GenderImputer = StrImputer(inputCol=col_name, outputCols=col_name, value=value)
+                imputer: StrImputer = StrImputer(inputCol=col_name, outputCols=col_name, value=value)
                 self.stages.append(imputer)
 
         for cat_col in categorical_features:
@@ -95,7 +95,8 @@ class PreProcessing():
         self.stages.append(imputer)
 
         for num_col in numerical_features:
-            scaler: StandardScaler = StandardScaler(inputCol=num_col, outputCol=f"{num_col}_scaled")
+            scaler: StandardScaler = StandardScaler(inputCol=f"{num_col}_imputed", outputCol=f"{num_col}_scaled")
+            self.stages.append(scaler)
             self.numerical_cols.append(f"{num_col}_scaled")
         
     def index_target(self, target_col: str) -> None:
