@@ -1,10 +1,18 @@
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix
-from sklearn.model_selection import GridSearchCV, cross_val_score
-from typing import Dict, Tuple, Any
-import pandas as pd
+from typing import Any, Dict, Tuple
 
-class Classifier():
+import pandas as pd
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+)
+from sklearn.model_selection import GridSearchCV
+from sklearn.pipeline import Pipeline
+
+
+class Classifier:
     """
     A generic classifier wrapper for building pipelines, training, evaluating, and tuning classification models.
     """
@@ -12,7 +20,9 @@ class Classifier():
     metrics = [f1_score, precision_score, recall_score]
     model: Any = None
 
-    def build_pipeline(self, stages: Tuple[str, object], model: object, **params) -> Pipeline:
+    def build_pipeline(
+        self, stages: Tuple[str, object], model: object, **params
+    ) -> Pipeline:
         """
         Constructs a scikit-learn pipeline with the provided preprocessing stages and classifier.
 
@@ -43,7 +53,7 @@ class Classifier():
         print("Treinando modelo...")
         self.model = pipeline.fit(train_X, train_y, **kwargs)
         return self.model
-    
+
     def evaluate(self, predictions: Any, test_y: Any) -> Dict[str, float]:
         """
         Evaluates predictions using accuracy and multiple classification metrics.
@@ -55,14 +65,14 @@ class Classifier():
         Returns:
             Dict[str, float]: Dictionary of evaluation metrics.
         """
-        print("Fazendo predições...")        
+        print("Fazendo predições...")
         print("Avaliando...")
         results: Dict[str, float] = {}
         results["accuracy"] = accuracy_score(test_y, predictions)
         for metric in self.metrics:
-            for average in ["macro", 'weighted', "micro"]:
+            for average in ["macro", "weighted", "micro"]:
                 metric_name = f"{metric.__name__}_{average}"
-                results[metric_name] = metric(test_y, predictions, average=average)             
+                results[metric_name] = metric(test_y, predictions, average=average)
         return results
 
     def get_confusion_matrix(self, predictions: Any, test_y: Any, **params) -> Any:
@@ -90,7 +100,7 @@ class Classifier():
         paramGrid: Dict[str, Any],
         evaluator: str = "f1",
         numFolds: int = 3,
-        seed: int = 42
+        seed: int = 42,
     ) -> GridSearchCV:
         """
         Performs cross-validation and hyperparameter tuning using GridSearchCV.
@@ -108,15 +118,15 @@ class Classifier():
             GridSearchCV: Fitted GridSearchCV object.
         """
         print("\n=== Realizando Cross-Validation e Tuning ===")
-        
+
         cv = GridSearchCV(
             estimator=base_pipeline,
             param_grid=paramGrid,
             scoring=evaluator,
-            cv=numFolds
+            cv=numFolds,
         )
 
         print("Iniciando cross-validation... (pode demorar)")
         cv_model = cv.fit(train_X, train_y)
-        
+
         return cv_model
