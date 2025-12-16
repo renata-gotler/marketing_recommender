@@ -1,6 +1,6 @@
-pytest-cov==5.0.0
-pytest==7.4.3
-ruff==0.4.4
-matplotlib==3.10.0
-pyspark==4.0.0
+pytest-cov==7.0.0
+pytest==9.0.2
+ruff==0.14.9
+matplotlib==3.10.8
+pyspark==4.1.0
 -r ./requirements.txt
