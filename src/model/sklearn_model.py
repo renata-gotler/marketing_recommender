@@ -38,7 +38,7 @@ class Classifier:
         pipeline = Pipeline([stages, ("clf", classifier)])
         return pipeline
 
-    def train(self, train_X: Any, train_y: Any, pipeline: Pipeline) -> Any:
+    def train(self, train_X: Any, train_y: Any, pipeline: Pipeline, **kwargs) -> Any:
         """
         Trains the pipeline on the provided training data.
 
@@ -51,7 +51,7 @@ class Classifier:
             Any: Fitted pipeline.
         """
         print("Treinando modelo...")
-        self.model = pipeline.fit(train_X, train_y)
+        self.model = pipeline.fit(train_X, train_y, **kwargs)
         return self.model
 
     def evaluate(self, predictions: Any, test_y: Any) -> Dict[str, float]:
